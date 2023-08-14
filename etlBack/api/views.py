@@ -4,7 +4,6 @@ from rest_framework import status
 from .models import Transaction, TransformationBlock
 from .serializers import TransactionSerializer, TransformationBlockSerializer
 from .service import add_six_percent_to_amounts, subtract_percentage_from_amounts
-from django.shortcuts import redirect, get_object_or_404
 
 
 class TransactionView(APIView):
@@ -70,14 +69,6 @@ class TransformationBlockView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def update_operation(request, operation_id):
-        operation = get_object_or_404(TransformationBlock, id=operation_id)
-        if request.method == 'POST':
-            new_percentage = float(request.POST['percentage'])
-            operation.percentage = new_percentage
-            operation.save()
-        return redirect('edit_operations')
 
 
 class TransformProcess(APIView):
